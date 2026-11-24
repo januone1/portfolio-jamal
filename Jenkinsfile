@@ -4,23 +4,40 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Source code berhasil diambil dari GitHub'
+                git branch: 'main',
+                    url: 'https://github.com/januone1/portfolio-jamal.git'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'ls -lah'
+                echo 'Memeriksa file website...'
                 sh 'test -f index.html'
-                echo 'Build portfolio berhasil'
+                sh 'test -f style.css'
+                sh 'test -f script.js'
+                sh 'ls -la'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Simulasi deploy berhasil'
+                echo 'Deploy seluruh file dan folder website...'
+                sh '''
+                    rsync -av --delete \
+                        --exclude='.git/' \
+                        --exclude='Jenkinsfile' \
+                        ./ /var/www/portfolio-jamal/
+                '''
             }
         }
- 
-   }
+    }
+
+    post {
+        success {
+            echo 'Deploy website berhasil!'
+        }
+        failure {
+            echo 'Deploy website gagal!'
+        }
+    }
 }

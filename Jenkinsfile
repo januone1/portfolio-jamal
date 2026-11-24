@@ -2,13 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/januone1/portfolio-jamal.git'
-            }
-        }
-
         stage('Build') {
             steps {
                 echo 'Memeriksa file website...'
